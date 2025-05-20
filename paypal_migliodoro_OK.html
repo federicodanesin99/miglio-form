@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Iscrizione Miglio d'Oro</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f7f7;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    h2 {
+      text-align: center;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, select {
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      margin-top: 5px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #0070ba;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .total {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+  </style>
+</head>
+<body>
+  <h2>Modulo di Iscrizione - Miglio d'Oro</h2>
+  <form id="registrationForm">
+    <label>Nome</label>
+    <input type="text" name="nome" required>
+
+    <label>Cognome</label>
+    <input type="text" name="cognome" required>
+
+    <label>Email</label>
+    <input type="email" name="email" required>
+
+    <label>Itinerario</label>
+    <select name="itinerario" required>
+      <option value="Oro">Oro</option>
+      <option value="Argento">Argento</option>
+      <option value="Bronzo">Bronzo</option>
+    </select>
+
+    <label>Pacchetto d'iscrizione</label>
+    <select name="pacchetto" id="pacchetto" required>
+      <option value="7">Base - 7€</option>
+      <option value="14">Cena - 14€</option>
+    </select>
+
+    <label>
+      <input type="checkbox" id="magliaCheck"> Voglio anche la maglia
+    </label>
+
+    <label id="tagliaLabel" style="display:none">Taglia Maglia</label>
+    <select id="tagliaSelect" name="taglia" style="display:none">
+      <option value="S">S</option>
+      <option value="M">M</option>
+      <option value="L">L</option>
+      <option value="XL">XL</option>
+    </select>
+
+    <div class="total">Totale da pagare: <span id="totale">7</span>€</div>
+    <button type="submit">Invia e paga con PayPal</button>
+  </form>
+
+  <script>
+    const pacchetto = document.getElementById("pacchetto");
+    const magliaCheck = document.getElementById("magliaCheck");
+    const tagliaLabel = document.getElementById("tagliaLabel");
+    const tagliaSelect = document.getElementById("tagliaSelect");
+    const totale = document.getElementById("totale");
+
+    function aggiornaTotale() {
+      let base = parseInt(pacchetto.value);
+      let extra = magliaCheck.checked ? 10 : 0;
+      totale.textContent = base + extra;
+    }
+
+    pacchetto.addEventListener("change", aggiornaTotale);
+    magliaCheck.addEventListener("change", () => {
+      const visible = magliaCheck.checked;
+      tagliaLabel.style.display = visible ? "block" : "none";
+      tagliaSelect.style.display = visible ? "block" : "none";
+      aggiornaTotale();
+    });
+
+    document.getElementById("registrationForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = {
+        nome: form.nome.value,
+        cognome: form.cognome.value,
+        email: form.email.value,
+        itinerario: form.itinerario.value,
+        pacchetto: form.pacchetto.value,
+        maglia: magliaCheck.checked ? "Si - " + tagliaSelect.value : "No",
+        totale: totale.textContent + "€"
+      };
+
+      fetch("https://script.google.com/macros/s/AKfycbxmWqM7-XCc1gHwE4OIy6A3Gx9JY0QT0-Ep1CHI6wLXp96HQdSEz2IjrRJ7otXBvQdxyw/exec", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("Errore nell'invio");
+        window.location.href = "https://paypal.me/migliodoro/" + totale.textContent.replace('€','');
+      })
+      .catch(err => {
+        alert("Errore nell'invio del modulo: " + err.message);
+      });
+    });
+  </script>
+</body>
+</html>
