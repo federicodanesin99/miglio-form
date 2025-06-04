@@ -154,8 +154,8 @@
     // controllo sulla taglia se la maglia è selezionata
     console.log("magliaCheck:", magliaCheck.checked);
     console.log("tagliaSelect.value:", tagliaSelect.value);
-
     if (magliaCheck.checked && tagliaSelect.value === "-") {
+      e.preventDefault();
       alert("Per favore, seleziona una taglia della maglia.");
       tagliaSelect.focus();
       return;
