@@ -147,6 +147,28 @@
       }
     });
     document.addEventListener("DOMContentLoaded", aggiornaTotale);
+
+    form.addEventListener("submit", function(e) {
+    e.preventDefault();
+  
+    // controllo sulla taglia se la maglia è selezionata
+    if (magliaCheck.checked && tagliaSelect.value === "-") {
+      alert("Per favore, seleziona una taglia della maglia.");
+      tagliaSelect.focus();
+      return;
+    }
+  
+    // invio dati a Google Sheets
+    fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form)
+    }).then(() => {
+      window.location.href = redirectUrl.value;
+    }).catch(() => {
+      alert("Errore nell'invio. Riprova.");
+    });
+  });
+
   </script>
 </body>
 </html>
