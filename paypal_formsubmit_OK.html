@@ -95,7 +95,7 @@
 
     <label id="tagliaLabel" style="display:none">Taglia Maglia</label>
     <select id="tagliaSelect" name="Taglia" style="display:none">
-      <option value="-"selected>-</option>
+      <option value="-"  selected>-</option>
       <option value="S">S</option>
       <option value="M">M</option>
       <option value="L">L</option>
@@ -153,6 +153,9 @@
     e.preventDefault();
   
     // controllo sulla taglia se la maglia è selezionata
+    console.log("magliaCheck:", magliaCheck.checked);
+    console.log("tagliaSelect.value:", tagliaSelect.value);
+
     if (magliaCheck.checked && tagliaSelect.value === "-") {
       alert("Per favore, seleziona una taglia della maglia.");
       tagliaSelect.focus();
