@@ -135,7 +135,7 @@
       tagliaLabel.style.display = visible ? "block" : "none";
       tagliaSelect.style.display = visible ? "block" : "none";
       if (visible) {
-        magliaHidden.value = "Sì - " + tagliaSelect.value;
+        magliaHidden.value = "Sì";
       } else {
         magliaHidden.value = "No";
         tagliaSelect.value = "-"; // resetta la taglia
@@ -147,7 +147,7 @@
     
     tagliaSelect.addEventListener("change", () => {
       if (magliaCheck.checked) {
-        magliaHidden.value = "Sì - " + tagliaSelect.value;
+        magliaHidden.value = "Sì";
       }
     });
     document.addEventListener("DOMContentLoaded", aggiornaTotale);
