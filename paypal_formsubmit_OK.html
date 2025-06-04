@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Iscrizione Miglio d'Oro</title>
   <style>
     body {
@@ -47,26 +47,16 @@
       font-weight: bold;
       font-size: 1.2em;
     }
-  @media (max-width: 480px) {
-  body {
-    padding: 10px;
-  }
-  form {
-    padding: 15px;
-  }
-  input, select, button {
-    font-size: 16px;
-    width: 100%;
-  }
- }
+    @media (max-width: 480px) {
+      body { padding: 10px; }
+      form { padding: 15px; }
+      input, select, button { font-size: 16px; width: 100%; }
+    }
   </style>
 </head>
 <body>
   <h2>Modulo di Iscrizione - Miglio d'Oro</h2>
   <form id="registrationForm" action="https://script.google.com/macros/s/AKfycbx6KEZQTpns6wJYliFJf_C0GUI77dRvazREQR3DmgE0SVY_fYiYfu024URCovQzX2I3/exec" method="POST">
-    <input type="hidden" name="_next" id="redirectUrl" value="">
-    <input type="hidden" name="_captcha" value="false">
-
     <label>Nome</label>
     <input type="text" name="Nome" required>
 
@@ -95,13 +85,12 @@
 
     <label id="tagliaLabel" style="display:none">Taglia Maglia</label>
     <select id="tagliaSelect" name="Taglia" style="display:none">
-      <option value="-"  selected>-</option>
+      <option value="-" selected>-</option>
       <option value="S">S</option>
       <option value="M">M</option>
       <option value="L">L</option>
       <option value="XL">XL</option>
     </select>
-
 
     <input type="hidden" name="Maglia" id="magliaHidden" value="No">
     <input type="hidden" name="Totale" id="totaleHidden" value="7€">
@@ -119,7 +108,6 @@
     const totaleSpan = document.getElementById("totale");
     const totaleHidden = document.getElementById("totaleHidden");
     const magliaHidden = document.getElementById("magliaHidden");
-    const redirectUrl = document.getElementById("redirectUrl");
 
     function aggiornaTotale() {
       let base = pacchetto.value === "Base" ? 7 : 14;
@@ -127,7 +115,6 @@
       let totale = base + extra;
       totaleSpan.textContent = totale;
       totaleHidden.value = totale + "€";
-      redirectUrl.value = "https://paypal.me/migliodoro/" + totale;
     }
 
     pacchetto.addEventListener("change", aggiornaTotale);
@@ -136,34 +123,27 @@
       tagliaLabel.style.display = visible ? "block" : "none";
       tagliaSelect.style.display = visible ? "block" : "none";
       if (visible) {
-        magliaHidden.value = "Sì";
+        magliaHidden.value = "Sì - " + tagliaSelect.value;
       } else {
         magliaHidden.value = "No";
-        tagliaSelect.value = "-"; // resetta la taglia
+        tagliaSelect.value = "-";
       }
       aggiornaTotale();
     });
     tagliaSelect.addEventListener("change", () => {
       if (magliaCheck.checked) {
-        magliaHidden.value = "Sì";
+        magliaHidden.value = "Sì - " + tagliaSelect.value;
       }
     });
     document.addEventListener("DOMContentLoaded", aggiornaTotale);
 
-  form.addEventListener("submit", function(e) {
-    // controllo sulla taglia se la maglia è selezionata
-    console.log("magliaCheck:", magliaCheck.checked);
-    console.log("tagliaSelect.value:", tagliaSelect.value);
-    if (magliaCheck.checked && tagliaSelect.value === "-") {
-      e.preventDefault();
-      alert("Per favore, seleziona una taglia della maglia.");
-      tagliaSelect.focus();
-      return;
-    }
-  });
-  
-        
-  
+    form.addEventListener("submit", function(e) {
+      if (magliaCheck.checked && tagliaSelect.value === "-") {
+        e.preventDefault();
+        alert("Per favore, seleziona una taglia della maglia.");
+        tagliaSelect.focus();
+      }
+    });
   </script>
 </body>
 </html>
