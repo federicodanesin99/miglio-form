@@ -95,11 +95,13 @@
 
     <label id="tagliaLabel" style="display:none">Taglia Maglia</label>
     <select id="tagliaSelect" name="Taglia" style="display:none">
+      <option value="-" selected>-</option>
       <option value="S">S</option>
       <option value="M">M</option>
       <option value="L">L</option>
       <option value="XL">XL</option>
     </select>
+
 
     <input type="hidden" name="Maglia" id="magliaHidden" value="No">
     <input type="hidden" name="Totale" id="totaleHidden" value="7€">
@@ -132,13 +134,22 @@
       const visible = magliaCheck.checked;
       tagliaLabel.style.display = visible ? "block" : "none";
       tagliaSelect.style.display = visible ? "block" : "none";
-      magliaHidden.value = visible ? "Sì - " + tagliaSelect.value : "No";
+      if (visible) {
+        magliaHidden.value = "Sì - " + tagliaSelect.value;
+      } else {
+        magliaHidden.value = "No";
+        tagliaSelect.value = "-"; // resetta la taglia
+      }
+    });
+    
       aggiornaTotale();
     });
+    
     tagliaSelect.addEventListener("change", () => {
-      magliaHidden.value = "Sì - " + tagliaSelect.value;
+      if (magliaCheck.checked) {
+        magliaHidden.value = "Sì - " + tagliaSelect.value;
+      }
     });
-
     document.addEventListener("DOMContentLoaded", aggiornaTotale);
   </script>
 </body>
