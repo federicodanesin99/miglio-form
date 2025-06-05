@@ -84,7 +84,7 @@
     </label>
 
     <label id="tagliaLabel" style="display:none">Taglia Maglia</label>
-    <select id="tagliaSelect" name="Taglia" style="display:none">
+    <select id="tagliaSelect" style="display:none">
       <option value="-" selected>-</option>
       <option value="S">S</option>
       <option value="M">M</option>
@@ -93,10 +93,11 @@
     </select>
 
     <input type="hidden" name="Maglia" id="magliaHidden" value="No">
+    <input type="hidden" name="Taglia" id="tagliaHidden" value="-">
     <input type="hidden" name="Totale" id="totaleHidden" value="7€">
 
     <div class="total">Totale da pagare: <span id="totale">7</span>€</div>
-    <button type="submit">Invia e paga con PayPal</button>
+    <button type="submit">Invia</button>
   </form>
 
   <script>
@@ -108,6 +109,7 @@
     const totaleSpan = document.getElementById("totale");
     const totaleHidden = document.getElementById("totaleHidden");
     const magliaHidden = document.getElementById("magliaHidden");
+    const tagliaHidden = document.getElementById("tagliaHidden");
 
     function aggiornaTotale() {
       let base = pacchetto.value === "Base" ? 7 : 14;
@@ -118,24 +120,29 @@
     }
 
     pacchetto.addEventListener("change", aggiornaTotale);
+
     magliaCheck.addEventListener("change", () => {
       const visible = magliaCheck.checked;
       tagliaLabel.style.display = visible ? "block" : "none";
       tagliaSelect.style.display = visible ? "block" : "none";
+
       if (visible) {
-        magliaHidden.value = "Sì - " + tagliaSelect.value;
+        magliaHidden.value = "Sì";
+        tagliaHidden.value = tagliaSelect.value;
       } else {
         magliaHidden.value = "No";
         tagliaSelect.value = "-";
+        tagliaHidden.value = "-";
       }
+
       aggiornaTotale();
     });
+
     tagliaSelect.addEventListener("change", () => {
       if (magliaCheck.checked) {
-        magliaHidden.value = "Sì - " + tagliaSelect.value;
+        tagliaHidden.value = tagliaSelect.value;
       }
     });
-    document.addEventListener("DOMContentLoaded", aggiornaTotale);
 
     form.addEventListener("submit", function(e) {
       if (magliaCheck.checked && tagliaSelect.value === "-") {
@@ -144,6 +151,8 @@
         tagliaSelect.focus();
       }
     });
+
+    document.addEventListener("DOMContentLoaded", aggiornaTotale);
   </script>
 </body>
 </html>
